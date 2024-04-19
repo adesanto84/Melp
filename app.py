@@ -63,12 +63,25 @@ def delete_restaurant(id):
 
 @app.route('/restaurants', methods=['POST'])
 def create_restaurant():
+    """
+    Crea un nuevo restaurante basado en los datos proporcionados.
+
+    Devuelve:
+        Un diccionario con dos campos:
+        - 'message': Una cadena que indica el estado de la operación.
+        - 'id': El ID del restaurante creado.
+
+    Errores:
+        KeyError: Si falta alguno de los campos requeridos o están vacíos.
+        ValueError: Si alguno de los campos tiene valores inválidos.
+    """
     data = request.json
-    # Verifico si se estan enviando todos los campos requeridos.
+
+    # Verifico si se están enviando todos los campos requeridos.
     required_fields = ['name', 'rating', 'site', 'email', 'phone', 'street', 'city', 'state', 'lat', 'lng']
     for field in required_fields:
         if data.get(field) is None or data[field] == '':
-            return { 'error': f'{field.capitalize()} is required' }, 400
+            return { 'KeyError': f'{field.capitalize()} es requerido' }, 400
     
     field_validation = {
         'rating': lambda x: isinstance(x, int) and 0 <= x <= 4,
@@ -78,7 +91,7 @@ def create_restaurant():
     
     for field, validation in field_validation.items():
         if field in data and not validation(data[field]):
-            return { 'error': f'Invalid value for {field}' }, 400
+            return { 'ValueError': f'Invalid value for {field}' }, 400
     
     data['id'] = str(uuid4())
     
