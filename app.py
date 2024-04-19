@@ -110,7 +110,12 @@ def update_restaurant(id):
     }
     for field, validation in field_validation.items():
         if field in data and not validation(data[field]):
-            return { 'error': f'Invalid value for {field}' }, 400
+            return { 'ValueError': f'Invalid value for {field}' }, 400
+    
+    # Verifico si se envio el ID en el body
+    if 'id' in data:
+        return { 'KeyError': 'ID cannot be updated' }, 400
+    
     restaurant = Restaurant.query.get(id)
     for key, value in data.items():
         setattr(restaurant, key, value)
