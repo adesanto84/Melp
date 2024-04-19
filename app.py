@@ -176,9 +176,12 @@ def search_restaurants():
     if not lat or not lng or not radius:
         return {'KeyError': 'lat and lng and radius are required'}, 400
     
-    lat = float(lat)
-    lng = float(lng)
-    radius = float(radius)
+    try:
+        lat = float(lat)
+        lng = float(lng)
+        radius = float(radius)
+    except ValueError:
+        return {'ValueError': 'lat, lng and radius must be numbers'}, 400
 
     point = f'POINT({lat} {lng})'
     geom = func.ST_GeomFromText(point, 4326)
