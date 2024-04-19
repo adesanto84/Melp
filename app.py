@@ -204,16 +204,16 @@ def search_restaurants():
     point = f'POINT({lat} {lng})'
     geom = func.ST_GeomFromText(point, 4326)
 
-    restaurants = Restaurant.query.filter(func.ST_DistanceSphere(
+    query = Restaurant.query.filter(func.ST_DistanceSphere(
         geom,
         func.ST_SetSRID(func.ST_MakePoint(Restaurant.lat, Restaurant.lng), 4326)
-    ) < radius).all()
+    ) < radius)
 
-    count = len(restaurants)
+    count = query.count()
     if count == 0:
         return {'count': 0, 'avg': 0, 'std': 0}
     
-    avg_rating = sum(restaurant.rating for restaurant in restaurants) / count
-    std_dev = (sum((restaurant.rating - avg_rating)**2 for restaurant in restaurants) / count)**0.5
+    avg_rating = query.with_entities(func.avg(Restaurant.rating)).scalar()
+    std_dev = query.with_entities(func.stddev(Restaurant.rating)).scalar()
 
     return {'count': count, 'avg_rating': avg_rating, 'std_dev': std_dev}
