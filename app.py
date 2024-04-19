@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
-import pandas as pd
 
 app = Flask(__name__)
 uri = os.getenv('DATABASE_URL')
