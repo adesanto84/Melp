@@ -33,6 +33,14 @@ def index():
 
 @app.route('/restaurants')
 def get_restaurants():
+    """
+    Obtiene la lista de restaurantes en la base de datos.
+
+    Devuelve:
+
+    - Un diccionario con una lista de diccionarios con el ID y el nombre de cada restaurante.
+
+    """
     restaurants = Restaurant.query.all()
     return {'restaurants': [{'id': restaurant.id, 'name': restaurant.name} for restaurant in restaurants]}
 
