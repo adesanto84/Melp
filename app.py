@@ -23,16 +23,6 @@ class Restaurant(db.Model):
     lng = db.Column(db.Float)
 
 
-@app.before_first_request
-def setup():
-    db.create_all()
-    if Restaurant.query.first() is None:
-        data = pd.read_csv('restaurants.csv')
-        for _, row in data.iterrows():
-            restaurant = Restaurant(**row)
-            db.session.add(restaurant)
-        db.session.commit()
-
 @app.route('/')
 def index():
     return 'Hello, World! Testing Melp API'
