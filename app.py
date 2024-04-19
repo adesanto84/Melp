@@ -103,11 +103,13 @@ def create_restaurant():
 @app.route('/restaurants/<id>', methods=['PUT'])
 def update_restaurant(id):
     data = request.json
+    
     field_validation = {
         'rating': lambda x: isinstance(x, int) and 0 <= x <= 4,
         'lat': lambda x: isinstance(x, float) and -90 <= x <= 90,
         'lng': lambda x: isinstance(x, float) and -180 <= x <= 180
     }
+    
     for field, validation in field_validation.items():
         if field in data and not validation(data[field]):
             return { 'ValueError': f'Invalid value for {field}' }, 400
@@ -127,8 +129,10 @@ def search_restaurants():
     lat = request.args.get('latitude')
     lng = request.args.get('longitude')
     radius = request.args.get('radius')
+    
     if not lat or not lng or not radius:
         return {'error': 'lat and lng and radius are required'}, 400
+    
     lat = float(lat)
     lng = float(lng)
     radius = float(radius)
@@ -144,6 +148,8 @@ def search_restaurants():
     count = len(restaurants)
     if count == 0:
         return {'count': 0, 'avg': 0, 'std': 0}
+    
     avg_rating = sum(restaurant.rating for restaurant in restaurants) / count
     std_dev = (sum((restaurant.rating - avg_rating)**2 for restaurant in restaurants) / count)**0.5
+
     return {'count': count, 'avg_rating': avg_rating, 'std_dev': std_dev}
