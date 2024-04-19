@@ -1,3 +1,4 @@
+from uuid import uuid4
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -57,3 +58,29 @@ def delete_restaurant(id):
     db.session.delete(restaurant)
     db.session.commit()
     return {'message': 'Restaurant deleted'}
+
+@app.route('/restaurants', methods=['POST'])
+def create_restaurant():
+    data = request.json
+    # Verifico si se estan enviando todos los campos requeridos.
+    required_fields = ['name', 'rating', 'site', 'email', 'phone', 'street', 'city', 'state', 'lat', 'lng']
+    for field in required_fields:
+        if data.get(field) is None or data[field] == '':
+            return { 'error': f'{field.capitalize()} is required' }, 400
+    
+    field_validation = {
+        'rating': lambda x: isinstance(x, int) and 0 <= x <= 4,
+        'lat': lambda x: isinstance(x, float) and -90 <= x <= 90,
+        'lng': lambda x: isinstance(x, float) and -180 <= x <= 180
+    }
+    
+    for field, validation in field_validation.items():
+        if field in data and not validation(data[field]):
+            return { 'error': f'Invalid value for {field}' }, 400
+    
+    data['id'] = str(uuid4())
+    
+    restaurant = Restaurant(**data)
+    db.session.add(restaurant)
+    db.session.commit()
+    return {'message': 'Restaurant created.', 'id': restaurant.id}, 201
