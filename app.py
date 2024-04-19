@@ -169,6 +169,24 @@ def update_restaurant(id):
 
 @app.route('/restaurants/statistics')
 def search_restaurants():
+    """
+    Obtiene la cantidad de restaurantes, el promedio de calificaciones y la desviación estándar de las calificaciones de los restaurantes en un radio determinado.
+
+    Parámetros:
+    - latitude: La latitud del punto central.
+    - longitude: La longitud del punto central.
+    - radius: El radio en metros.
+
+    Devuelve:
+    - Un diccionario con tres campos:
+        - count: La cantidad de restaurantes en el radio.
+        - avg_rating: El promedio de calificaciones de los restaurantes en el radio.
+        - std_dev: La desviación estándar de las calificaciones de los restaurantes en el radio.
+
+    Errores:
+    - ValueError: Si alguno de los parámetros no es un número del tipo float.
+    - KeyError: Si alguno de los parámetros no se proporciona.
+    """
     lat = request.args.get('latitude')
     lng = request.args.get('longitude')
     radius = request.args.get('radius')
