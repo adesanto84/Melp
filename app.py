@@ -117,7 +117,7 @@ def update_restaurant(id):
     Args:
         id (int): El ID del restaurante que se va a actualizar.
 
-    Returns:
+    Devuelve:
         dict: Un diccionario que contiene el mensaje de respuesta.
 
     Errores:
