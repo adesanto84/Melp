@@ -56,6 +56,15 @@ def get_restaurant_info(id):
 
 @app.route('/restaurants/<id>', methods=['DELETE'])
 def delete_restaurant(id):
+    """
+    Elimina un restaurante de la base de datos.
+
+    Parámetros:
+    - id: El ID del restaurante a eliminar.
+
+    Devuelve:
+    - Un diccionario con el mensaje 'Restaurant deleted'.
+    """
     restaurant = Restaurant.query.get(id)
     db.session.delete(restaurant)
     db.session.commit()
