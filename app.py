@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -31,4 +31,23 @@ def index():
 @app.route('/restaurants')
 def get_restaurants():
     restaurants = Restaurant.query.all()
-    return {'restaurants': [{'name': restaurant.name, 'rating': restaurant.rating} for restaurant in restaurants]}
+    return {'restaurants': [{'id': restaurant.id, 'name': restaurant.name} for restaurant in restaurants]}
+
+@app.route('/restaurants/<id>/info')
+def get_restaurant_info(id):
+    restaurant = Restaurant.query.get(id)
+    if restaurant is None:
+        return {'error': 'Restaurant not found'}, 404
+    return {
+        'name': restaurant.name,
+        'rating': restaurant.rating,
+        'site': restaurant.site,
+        'email': restaurant.email,
+        'phone': restaurant.phone,
+        'street': restaurant.street,
+        'city': restaurant.city,
+        'state': restaurant.state,
+        'lat': restaurant.lat,
+        'lng': restaurant.lng
+    }
+
