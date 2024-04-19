@@ -111,7 +111,7 @@ def update_restaurant(id):
     Returns:
         dict: Un diccionario que contiene el mensaje de respuesta.
 
-    Raises:
+    Errores:
         ValueError: Si alguno de los valores de campo proporcionados es inválido.
         KeyError: Si el campo 'id' está incluido en el cuerpo de la solicitud.
 
