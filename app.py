@@ -34,7 +34,7 @@ def get_restaurants():
     restaurants = Restaurant.query.all()
     return {'restaurants': [{'id': restaurant.id, 'name': restaurant.name} for restaurant in restaurants]}
 
-@app.route('/restaurants/<id>/info')
+@app.route('/restaurants/<id>')
 def get_restaurant_info(id):
     restaurant = Restaurant.query.get(id)
     if restaurant is None:
