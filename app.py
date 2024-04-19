@@ -113,9 +113,9 @@ def create_restaurant():
             return { 'KeyError': f'{field.capitalize()} es requerido' }, 400
     
     field_validation = {
-        'rating': lambda x: isinstance(x, int) and 0 >= x <= 4,
-        'lat': lambda x: isinstance(x, float) and -90 >= x <= 90,
-        'lng': lambda x: isinstance(x, float) and -180 >= x <= 180
+        'rating': lambda x: isinstance(x, int) and 0 <= x <= 4,
+        'lat': lambda x: isinstance(x, float) and -90 <= x <= 90,
+        'lng': lambda x: isinstance(x, float) and -180 <= x <= 180
     }
     
     for field, validation in field_validation.items():
@@ -148,9 +148,9 @@ def update_restaurant(id):
     data = request.json
     
     field_validation = {
-        'rating': lambda x: isinstance(x, int) and 0 >= x <= 4,
-        'lat': lambda x: isinstance(x, float) and -90 >= x <= 90,
-        'lng': lambda x: isinstance(x, float) and -180 >= x <= 180
+        'rating': lambda x: isinstance(x, int) and 0 <= x <= 4,
+        'lat': lambda x: isinstance(x, float) and -90 <= x <= 90,
+        'lng': lambda x: isinstance(x, float) and -180 <= x <= 180
     }
     
     for field, validation in field_validation.items():
