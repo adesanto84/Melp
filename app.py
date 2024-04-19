@@ -51,3 +51,9 @@ def get_restaurant_info(id):
         'lng': restaurant.lng
     }
 
+@app.route('/restaurants/<id>', methods=['DELETE'])
+def delete_restaurant(id):
+    restaurant = Restaurant.query.get(id)
+    db.session.delete(restaurant)
+    db.session.commit()
+    return {'message': 'Restaurant deleted'}
