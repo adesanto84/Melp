@@ -1,6 +1,8 @@
 from uuid import uuid4
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
+from geoalchemy2 import Geometry
 import os
 
 app = Flask(__name__)
@@ -101,3 +103,29 @@ def update_restaurant(id):
         setattr(restaurant, key, value)
     db.session.commit()
     return {'message': 'Restaurant updated'}
+
+@app.route('/restaurants/statistics')
+def search_restaurants():
+    lat = request.args.get('latitude')
+    lng = request.args.get('longitude')
+    radius = request.args.get('radius')
+    if not lat or not lng or not radius:
+        return {'error': 'lat and lng and radius are required'}, 400
+    lat = float(lat)
+    lng = float(lng)
+    radius = float(radius)
+
+    point = f'POINT({lat} {lng})'
+    geom = func.ST_GeomFromText(point, 4326)
+
+    restaurants = Restaurant.query.filter(func.ST_DistanceSphere(
+        geom,
+        func.ST_SetSRID(func.ST_MakePoint(Restaurant.lat, Restaurant.lng), 4326)
+    ) < radius).all()
+
+    count = len(restaurants)
+    if count == 0:
+        return {'count': 0, 'avg': 0, 'std': 0}
+    avg_rating = sum(restaurant.rating for restaurant in restaurants) / count
+    std_dev = (sum((restaurant.rating - avg_rating)**2 for restaurant in restaurants) / count)**0.5
+    return {'count': count, 'avg_rating': avg_rating, 'std_dev': std_dev}
