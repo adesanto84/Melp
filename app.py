@@ -64,7 +64,7 @@ def delete_restaurant(id):
 @app.route('/restaurants', methods=['POST'])
 def create_restaurant():
     """
-    Crea un nuevo restaurante basado en los datos proporcionados.
+    Crea un nuevo restaurante basado en los datos proporcionados en el body en formato json.
 
     Devuelve:
         Un diccionario con dos campos:
@@ -102,6 +102,20 @@ def create_restaurant():
 
 @app.route('/restaurants/<id>', methods=['PUT'])
 def update_restaurant(id):
+    """
+    Actualiza un restaurante mediante el ID proporcionado utilizando los datos proporcionados en el body de la solicitud en formato json.
+
+    Args:
+        id (int): El ID del restaurante que se va a actualizar.
+
+    Returns:
+        dict: Un diccionario que contiene el mensaje de respuesta.
+
+    Raises:
+        ValueError: Si alguno de los valores de campo proporcionados es inválido.
+        KeyError: Si el campo 'id' está incluido en el cuerpo de la solicitud.
+
+    """
     data = request.json
     
     field_validation = {
