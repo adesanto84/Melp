@@ -46,6 +46,18 @@ def get_restaurants():
 
 @app.route('/restaurants/<id>')
 def get_restaurant_info(id):
+    """
+    Obtiene la información de un restaurante basado en su ID.
+
+    Parámetros:
+    - id: El ID del restaurante a buscar.
+
+    Devuelve:
+    - Un diccionario con la información del restaurante.
+
+    Errores:
+    - 404: Si el restaurante no se encuentra en la base de datos.
+    """
     restaurant = Restaurant.query.get(id)
     if restaurant is None:
         return {'error': 'Restaurant not found'}, 404
