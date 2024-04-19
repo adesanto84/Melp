@@ -174,7 +174,7 @@ def search_restaurants():
     radius = request.args.get('radius')
     
     if not lat or not lng or not radius:
-        return {'error': 'lat and lng and radius are required'}, 400
+        return {'KeyError': 'lat and lng and radius are required'}, 400
     
     lat = float(lat)
     lng = float(lng)
