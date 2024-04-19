@@ -84,3 +84,20 @@ def create_restaurant():
     db.session.add(restaurant)
     db.session.commit()
     return {'message': 'Restaurant created.', 'id': restaurant.id}, 201
+
+@app.route('/restaurants/<id>', methods=['PUT'])
+def update_restaurant(id):
+    data = request.json
+    field_validation = {
+        'rating': lambda x: isinstance(x, int) and 0 <= x <= 4,
+        'lat': lambda x: isinstance(x, float) and -90 <= x <= 90,
+        'lng': lambda x: isinstance(x, float) and -180 <= x <= 180
+    }
+    for field, validation in field_validation.items():
+        if field in data and not validation(data[field]):
+            return { 'error': f'Invalid value for {field}' }, 400
+    restaurant = Restaurant.query.get(id)
+    for key, value in data.items():
+        setattr(restaurant, key, value)
+    db.session.commit()
+    return {'message': 'Restaurant updated'}
